@@ -15,7 +15,7 @@ import { AssignmentsModule } from './assignments/assignments.module';
       password: process.env['DB_PASSWORD'] ?? 'postgres',
       database: process.env['DB_NAME'] ?? 'teamtracker',
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: process.env['NODE_ENV'] !== 'production',
     }),
     UsersModule,
     AssignmentsModule,

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, Repository } from 'typeorm';
+import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { Assignment } from './assignment.entity';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { UpdateAssignmentDto } from './dto/update-assignment.dto';
@@ -21,8 +21,13 @@ export class AssignmentsService {
     if (filters.userId) {
       where['userId'] = filters.userId;
     }
-    if (filters.startDate && filters.endDate) {
-      where['startDate'] = Between(filters.startDate, filters.endDate);
+    // Return assignments that overlap the requested date range:
+    // assignment.startDate <= filters.endDate AND assignment.endDate >= filters.startDate
+    if (filters.startDate) {
+      where['endDate'] = MoreThanOrEqual(filters.startDate);
+    }
+    if (filters.endDate) {
+      where['startDate'] = LessThanOrEqual(filters.endDate);
     }
     return this.assignmentsRepository.find({ where });
   }
