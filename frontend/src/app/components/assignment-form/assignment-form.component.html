@@ -1,0 +1,47 @@
+<div class="modal-backdrop" (click)="cancel()">
+  <div class="modal-panel" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ isEditMode ? 'Edit Assignment' : 'New Assignment' }}</h2>
+      <button class="btn-icon" (click)="cancel()" title="Close">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="user-select">Team Member</label>
+        <select id="user-select" [(ngModel)]="userId">
+          <option [ngValue]="null" disabled>— select a member —</option>
+          @for (u of users; track u.id) {
+            <option [ngValue]="u.id">{{ u.name }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="task-text">Task</label>
+        <input id="task-text" type="text" [(ngModel)]="taskText" placeholder="Describe the task…" />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="start-date">Start Date</label>
+          <input id="start-date" type="date" [(ngModel)]="startDate" />
+        </div>
+        <div class="form-group">
+          <label for="end-date">End Date</label>
+          <input id="end-date" type="date" [(ngModel)]="endDate" />
+        </div>
+      </div>
+
+      @if (error) {
+        <p class="error-msg">{{ error }}</p>
+      }
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-ghost" (click)="cancel()">Cancel</button>
+      <button class="btn btn-primary" (click)="submit()" [disabled]="saving">
+        {{ saving ? 'Saving…' : (isEditMode ? 'Update' : 'Create') }}
+      </button>
+    </div>
+  </div>
+</div>

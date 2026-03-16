@@ -1,0 +1,56 @@
+<div class="app-shell">
+  <!-- Title bar -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-icon">📅</span>
+        <span class="brand-title">Team Availability Planner</span>
+      </div>
+      <nav class="nav-tabs">
+        <button class="nav-tab" [class.active]="activeTab === 'calendar'" (click)="setTab('calendar')">
+          Calendar
+        </button>
+        <button class="nav-tab" [class.active]="activeTab === 'users'" (click)="setTab('users')">
+          Users
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="app-main">
+    @if (loading) {
+      <div class="loading-state">Loading…</div>
+    } @else {
+      @if (activeTab === 'calendar') {
+        <app-calendar
+          [users]="users"
+          [assignments]="assignments"
+          (addRequested)="openAddForCell($event)"
+          (editRequested)="openEditModal($event)"
+        />
+      }
+      @if (activeTab === 'users') {
+        <app-users
+          [users]="users"
+          (changed)="onUsersChanged()"
+        />
+      }
+    }
+  </main>
+
+  <!-- Floating + button -->
+  <button class="fab" (click)="openAddModal()" title="Add assignment">+</button>
+
+  <!-- Modal -->
+  @if (modal.open) {
+    <app-assignment-form
+      [users]="users"
+      [existingAssignment]="modal.existingAssignment"
+      [prefillUserId]="modal.prefillUserId"
+      [prefillDate]="modal.prefillDate"
+      (saved)="onModalSaved()"
+      (cancelled)="onModalCancelled()"
+    />
+  }
+</div>
