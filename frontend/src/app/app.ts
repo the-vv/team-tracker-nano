@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, NgZone, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService, User, Assignment } from './services/api.service';
 import { UsersComponent } from './components/users/users.component';
@@ -23,6 +23,8 @@ interface ModalState {
 })
 export class App implements OnInit {
   private readonly api = inject(ApiService);
+  private readonly zone = inject(NgZone);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   activeTab: ActiveTab = 'calendar';
   users: User[] = [];
@@ -39,16 +41,31 @@ export class App implements OnInit {
     this.loading = true;
     this.api.getUsers().subscribe({
       next: (u) => {
-        this.users = u;
-        this.api.getAssignments().subscribe({
-          next: (a) => {
-            this.assignments = a;
-            this.loading = false;
-          },
-          error: () => { this.loading = false; }
+        this.zone.run(() => {
+          this.users = u;
+          this.api.getAssignments().subscribe({
+            next: (a) => {
+              this.zone.run(() => {
+                this.assignments = a;
+                this.loading = false;
+                this.cdr.markForCheck();
+              });
+            },
+            error: () => {
+              this.zone.run(() => {
+                this.loading = false;
+                this.cdr.markForCheck();
+              });
+            }
+          });
         });
       },
-      error: () => { this.loading = false; }
+      error: () => {
+        this.zone.run(() => {
+          this.loading = false;
+          this.cdr.markForCheck();
+        });
+      }
     });
   }
 
