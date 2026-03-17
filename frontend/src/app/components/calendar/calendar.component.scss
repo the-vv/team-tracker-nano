@@ -53,7 +53,8 @@
   &.today {
     border-bottom: 2px solid var(--color-primary);
 
-    .day-label, .date-label {
+    .day-label,
+    .date-label {
       color: var(--color-primary);
     }
   }
@@ -183,4 +184,27 @@
   padding: 48px 24px;
   color: var(--color-text-muted);
   font-size: 14px;
+}
+
+.nav-button-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px;
+  gap: 8px;
+
+  .nav-btn {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.1s, border-color 0.1s;
+
+    &:hover {
+      background: var(--color-surface-2);
+      border-color: var(--color-primary);
+    }
+  }
 }

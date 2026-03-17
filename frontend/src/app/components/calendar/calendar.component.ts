@@ -29,6 +29,7 @@ export class CalendarComponent implements OnChanges {
 
   days: DayInfo[] = [];
   cellMap = new Map<string, Assignment[]>();
+  dayOffset = 5;
 
   ngOnChanges(_changes: SimpleChanges): void {
     this.buildDays();
@@ -37,9 +38,11 @@ export class CalendarComponent implements OnChanges {
 
   private buildDays(): void {
     const today = new Date();
+    // go back 1 day
+    today.setDate(today.getDate() - 1);
     today.setHours(0, 0, 0, 0);
     this.days = [];
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 15; i++) {
       const d = new Date(today);
       d.setDate(today.getDate() + i);
       const iso = this.toIso(d);
@@ -84,6 +87,39 @@ export class CalendarComponent implements OnChanges {
     const m = String(d.getMonth() + 1).padStart(2, '0');
     const dd = String(d.getDate()).padStart(2, '0');
     return `${y}-${m}-${dd}`;
+  }
+
+  goLeft(): void {
+    const firstDay = new Date(this.days[0].iso + 'T00:00:00');
+    firstDay.setDate(firstDay.getDate() - this.dayOffset);
+    this.buildDaysFrom(firstDay);
+    this.buildCellMap();
+  }
+
+  goRight(): void {
+    const lastDay = new Date(this.days[this.days.length - 1].iso + 'T00:00:00');
+    lastDay.setDate(lastDay.getDate() + this.dayOffset);
+    this.buildDaysFrom(lastDay);
+    this.buildCellMap();
+  }
+
+  goToday(): void {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    this.buildDaysFrom(today);
+    this.buildCellMap();
+  }
+
+  private buildDaysFrom(startDate: Date): void {
+    this.days = [];
+    for (let i = 0; i < 15; i++) {
+      const d = new Date(startDate);
+      d.setDate(startDate.getDate() + i);
+      const iso = this.toIso(d);
+      const dayLine = d.toLocaleDateString('en-US', { weekday: 'short' });
+      const dateLine = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      this.days.push({ iso, label: `${dayLine}\n${dateLine}`, dayLine, dateLine });
+    }
   }
 
   trackByUserId(_i: number, u: User) { return u.id; }

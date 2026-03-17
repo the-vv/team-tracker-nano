@@ -1,12 +1,18 @@
 <div class="calendar-wrapper">
   <div class="calendar-scroll">
+    <div class="nav-button-container">
+      <!-- add two buttons for go left and go right by 15 days-->
+      <button class="nav-btn" (click)="goLeft()">&#8592; 5d</button>
+      <button class="nav-btn" (click)="goRight()">5d &#8594;</button>
+      <button class="nav-btn" (click)="goToday()">Today</button>
+    </div>
     <table class="cal-table">
       <!-- Header row -->
       <thead>
         <tr>
           <th class="col-name sticky-col">Member</th>
           @for (day of days; track day.iso) {
-            <th class="col-day" [class.today]="day.iso === days[0]?.iso">
+            <th class="col-day" [class.today]="day.iso === days[1]?.iso">
               <span class="day-label">{{ day.dayLine }}</span>
               <span class="date-label">{{ day.dateLine }}</span>
             </th>
