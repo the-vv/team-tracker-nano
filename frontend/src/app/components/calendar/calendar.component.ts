@@ -29,7 +29,7 @@ export class CalendarComponent implements OnChanges {
 
   days: DayInfo[] = [];
   cellMap = new Map<string, Assignment[]>();
-  dayOffset = 5;
+  dayOffset = 7;
 
   ngOnChanges(_changes: SimpleChanges): void {
     this.buildDays();
@@ -97,7 +97,7 @@ export class CalendarComponent implements OnChanges {
   }
 
   goRight(): void {
-    const lastDay = new Date(this.days[this.days.length - 1].iso + 'T00:00:00');
+    const lastDay = new Date(this.days[0].iso + 'T00:00:00');
     lastDay.setDate(lastDay.getDate() + this.dayOffset);
     this.buildDaysFrom(lastDay);
     this.buildCellMap();
