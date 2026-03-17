@@ -1,0 +1,53 @@
+<div class="calendar-wrapper">
+  <div class="calendar-scroll">
+    <table class="cal-table">
+      <!-- Header row -->
+      <thead>
+        <tr>
+          <th class="col-name sticky-col">Member</th>
+          @for (day of days; track day.iso) {
+            <th class="col-day" [class.today]="day.iso === days[0]?.iso">
+              <span class="day-label">{{ day.dayLine }}</span>
+              <span class="date-label">{{ day.dateLine }}</span>
+            </th>
+          }
+        </tr>
+      </thead>
+
+      <!-- User rows -->
+      <tbody>
+        @for (user of users; track user.id) {
+          <tr>
+            <td class="col-name sticky-col user-name">{{ user.name }}</td>
+            @for (day of days; track day.iso) {
+              @let cellAssignments = getCellAssignments(user.id, day.iso);
+              <td class="cal-cell" (click)="onAddClick(user.id, day.iso, $event)">
+                @if (cellAssignments.length > 0) {
+                  <div class="cell-assignments">
+                    @for (a of cellAssignments; track a.id) {
+                      <div class="assignment-pill"
+                           (click)="onEditClick(a, $event)"
+                           [title]="a.taskText">
+                        {{ a.taskText }}
+                      </div>
+                    }
+                  </div>
+                } @else {
+                  <span class="free-label">Free</span>
+                }
+                <button class="add-btn" (click)="onAddClick(user.id, day.iso, $event)" title="Add assignment">+</button>
+              </td>
+            }
+          </tr>
+        }
+        @if (users.length === 0) {
+          <tr>
+            <td [attr.colspan]="days.length + 1" class="empty-state">
+              No team members yet. Add some from the Users tab.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+:root {
+  --color-bg: #121212;
+  --color-surface: #1e1e2e;
+  --color-surface-2: #252535;
+  --color-border: #2e2e3e;
+  --color-primary: #7c6af7;
+  --color-primary-hover: #6b59e6;
+  --color-text: #e2e2f0;
+  --color-text-muted: #9090a8;
+  --color-free: #22c55e;
+  --color-busy: #7c6af7;
+  --color-danger: #ef4444;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  color-scheme: dark;
+  height: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+input, select, textarea, button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}

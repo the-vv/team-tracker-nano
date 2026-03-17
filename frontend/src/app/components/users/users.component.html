@@ -1,0 +1,60 @@
+<div class="users-page">
+  <div class="section-header">
+    <h2>Team Members</h2>
+  </div>
+
+  <!-- Add user form -->
+  <div class="add-card">
+    <input
+      type="text"
+      [(ngModel)]="newName"
+      placeholder="New member name…"
+      class="text-input"
+      (keyup.enter)="addUser()"
+      [disabled]="adding"
+    />
+    <button class="btn btn-primary" (click)="addUser()" [disabled]="adding || !newName.trim()">
+      {{ adding ? 'Adding…' : 'Add Member' }}
+    </button>
+  </div>
+
+  <!-- User list -->
+  @if (users.length === 0) {
+    <div class="empty-state">No team members yet. Add one above.</div>
+  }
+
+  <div class="user-list">
+    @for (user of users; track user.id) {
+      <div class="user-card">
+        @if (editState?.id === user.id) {
+          <!-- Edit mode -->
+          <input
+            class="text-input edit-input"
+            [(ngModel)]="editState!.name"
+            (keyup.enter)="saveEdit()"
+            (keyup.escape)="cancelEdit()"
+            autofocus
+          />
+          <div class="actions">
+            <button class="btn btn-primary btn-sm" (click)="saveEdit()">Save</button>
+            <button class="btn btn-ghost btn-sm" (click)="cancelEdit()">Cancel</button>
+          </div>
+        } @else {
+          <!-- View mode -->
+          <div class="user-avatar">{{ user.name.charAt(0).toUpperCase() }}</div>
+          <span class="user-name">{{ user.name }}</span>
+          <div class="actions">
+            <button class="btn btn-ghost btn-sm" (click)="startEdit(user)">Rename</button>
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="confirmDelete(user)"
+              [disabled]="deletingId === user.id"
+            >
+              {{ deletingId === user.id ? '…' : 'Delete' }}
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
